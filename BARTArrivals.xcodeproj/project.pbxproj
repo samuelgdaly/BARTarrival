@@ -1,0 +1,966 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B641961E2D83DF080016CDFB /* BARTArrivals Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = B641961D2D83DF080016CDFB /* BARTArrivals Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B64196082D83DF080016CDFB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B64195EF2D83DF060016CDFB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B64195F62D83DF070016CDFB;
+			remoteInfo = BARTArrivals;
+		};
+		B64196122D83DF080016CDFB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B64195EF2D83DF060016CDFB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B64195F62D83DF070016CDFB;
+			remoteInfo = BARTArrivals;
+		};
+		B641961F2D83DF080016CDFB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B64195EF2D83DF060016CDFB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B641961C2D83DF080016CDFB;
+			remoteInfo = "BARTArrivals Watch App";
+		};
+		B64196302D83DF090016CDFB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B64195EF2D83DF060016CDFB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B641961C2D83DF080016CDFB;
+			remoteInfo = "BARTArrivals Watch App";
+		};
+		B641963A2D83DF090016CDFB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B64195EF2D83DF060016CDFB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B641961C2D83DF080016CDFB;
+			remoteInfo = "BARTArrivals Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B64196462D83DF090016CDFB /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				B641961E2D83DF080016CDFB /* BARTArrivals Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		B64195F72D83DF070016CDFB /* BARTArrivals.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BARTArrivals.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B64196072D83DF080016CDFB /* BARTArrivalsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BARTArrivalsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B64196112D83DF080016CDFB /* BARTArrivalsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BARTArrivalsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B641961D2D83DF080016CDFB /* BARTArrivals Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BARTArrivals Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B641962F2D83DF090016CDFB /* BARTArrivals Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BARTArrivals Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B64196392D83DF090016CDFB /* BARTArrivals Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BARTArrivals Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		B64195F92D83DF070016CDFB /* BARTArrivals */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BARTArrivals;
+			sourceTree = "<group>";
+		};
+		B641960A2D83DF080016CDFB /* BARTArrivalsTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BARTArrivalsTests;
+			sourceTree = "<group>";
+		};
+		B64196142D83DF080016CDFB /* BARTArrivalsUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BARTArrivalsUITests;
+			sourceTree = "<group>";
+		};
+		B64196212D83DF080016CDFB /* BARTArrivals Watch App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "BARTArrivals Watch App";
+			sourceTree = "<group>";
+		};
+		B64196322D83DF090016CDFB /* BARTArrivals Watch AppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "BARTArrivals Watch AppTests";
+			sourceTree = "<group>";
+		};
+		B641963C2D83DF090016CDFB /* BARTArrivals Watch AppUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "BARTArrivals Watch AppUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B64195F42D83DF070016CDFB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B64196042D83DF080016CDFB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B641960E2D83DF080016CDFB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B641961A2D83DF080016CDFB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B641962C2D83DF090016CDFB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B64196362D83DF090016CDFB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B64195EE2D83DF060016CDFB = {
+			isa = PBXGroup;
+			children = (
+				B64195F92D83DF070016CDFB /* BARTArrivals */,
+				B641960A2D83DF080016CDFB /* BARTArrivalsTests */,
+				B64196142D83DF080016CDFB /* BARTArrivalsUITests */,
+				B64196212D83DF080016CDFB /* BARTArrivals Watch App */,
+				B64196322D83DF090016CDFB /* BARTArrivals Watch AppTests */,
+				B641963C2D83DF090016CDFB /* BARTArrivals Watch AppUITests */,
+				B64195F82D83DF070016CDFB /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B64195F82D83DF070016CDFB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B64195F72D83DF070016CDFB /* BARTArrivals.app */,
+				B64196072D83DF080016CDFB /* BARTArrivalsTests.xctest */,
+				B64196112D83DF080016CDFB /* BARTArrivalsUITests.xctest */,
+				B641961D2D83DF080016CDFB /* BARTArrivals Watch App.app */,
+				B641962F2D83DF090016CDFB /* BARTArrivals Watch AppTests.xctest */,
+				B64196392D83DF090016CDFB /* BARTArrivals Watch AppUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B64195F62D83DF070016CDFB /* BARTArrivals */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B64196472D83DF090016CDFB /* Build configuration list for PBXNativeTarget "BARTArrivals" */;
+			buildPhases = (
+				B64195F32D83DF070016CDFB /* Sources */,
+				B64195F42D83DF070016CDFB /* Frameworks */,
+				B64195F52D83DF070016CDFB /* Resources */,
+				B64196462D83DF090016CDFB /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B64196202D83DF080016CDFB /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				B64195F92D83DF070016CDFB /* BARTArrivals */,
+			);
+			name = BARTArrivals;
+			packageProductDependencies = (
+			);
+			productName = BARTArrivals;
+			productReference = B64195F72D83DF070016CDFB /* BARTArrivals.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B64196062D83DF080016CDFB /* BARTArrivalsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B641964A2D83DF090016CDFB /* Build configuration list for PBXNativeTarget "BARTArrivalsTests" */;
+			buildPhases = (
+				B64196032D83DF080016CDFB /* Sources */,
+				B64196042D83DF080016CDFB /* Frameworks */,
+				B64196052D83DF080016CDFB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B64196092D83DF080016CDFB /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				B641960A2D83DF080016CDFB /* BARTArrivalsTests */,
+			);
+			name = BARTArrivalsTests;
+			packageProductDependencies = (
+			);
+			productName = BARTArrivalsTests;
+			productReference = B64196072D83DF080016CDFB /* BARTArrivalsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		B64196102D83DF080016CDFB /* BARTArrivalsUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B641964D2D83DF090016CDFB /* Build configuration list for PBXNativeTarget "BARTArrivalsUITests" */;
+			buildPhases = (
+				B641960D2D83DF080016CDFB /* Sources */,
+				B641960E2D83DF080016CDFB /* Frameworks */,
+				B641960F2D83DF080016CDFB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B64196132D83DF080016CDFB /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				B64196142D83DF080016CDFB /* BARTArrivalsUITests */,
+			);
+			name = BARTArrivalsUITests;
+			packageProductDependencies = (
+			);
+			productName = BARTArrivalsUITests;
+			productReference = B64196112D83DF080016CDFB /* BARTArrivalsUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		B641961C2D83DF080016CDFB /* BARTArrivals Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B64196432D83DF090016CDFB /* Build configuration list for PBXNativeTarget "BARTArrivals Watch App" */;
+			buildPhases = (
+				B64196192D83DF080016CDFB /* Sources */,
+				B641961A2D83DF080016CDFB /* Frameworks */,
+				B641961B2D83DF080016CDFB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				B64196212D83DF080016CDFB /* BARTArrivals Watch App */,
+			);
+			name = "BARTArrivals Watch App";
+			packageProductDependencies = (
+			);
+			productName = "BARTArrivals Watch App";
+			productReference = B641961D2D83DF080016CDFB /* BARTArrivals Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B641962E2D83DF090016CDFB /* BARTArrivals Watch AppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B64196502D83DF090016CDFB /* Build configuration list for PBXNativeTarget "BARTArrivals Watch AppTests" */;
+			buildPhases = (
+				B641962B2D83DF090016CDFB /* Sources */,
+				B641962C2D83DF090016CDFB /* Frameworks */,
+				B641962D2D83DF090016CDFB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B64196312D83DF090016CDFB /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				B64196322D83DF090016CDFB /* BARTArrivals Watch AppTests */,
+			);
+			name = "BARTArrivals Watch AppTests";
+			packageProductDependencies = (
+			);
+			productName = "BARTArrivals Watch AppTests";
+			productReference = B641962F2D83DF090016CDFB /* BARTArrivals Watch AppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		B64196382D83DF090016CDFB /* BARTArrivals Watch AppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B64196532D83DF090016CDFB /* Build configuration list for PBXNativeTarget "BARTArrivals Watch AppUITests" */;
+			buildPhases = (
+				B64196352D83DF090016CDFB /* Sources */,
+				B64196362D83DF090016CDFB /* Frameworks */,
+				B64196372D83DF090016CDFB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B641963B2D83DF090016CDFB /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				B641963C2D83DF090016CDFB /* BARTArrivals Watch AppUITests */,
+			);
+			name = "BARTArrivals Watch AppUITests";
+			packageProductDependencies = (
+			);
+			productName = "BARTArrivals Watch AppUITests";
+			productReference = B64196392D83DF090016CDFB /* BARTArrivals Watch AppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B64195EF2D83DF060016CDFB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+					B64195F62D83DF070016CDFB = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					B64196062D83DF080016CDFB = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = B64195F62D83DF070016CDFB;
+					};
+					B64196102D83DF080016CDFB = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = B64195F62D83DF070016CDFB;
+					};
+					B641961C2D83DF080016CDFB = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					B641962E2D83DF090016CDFB = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = B641961C2D83DF080016CDFB;
+					};
+					B64196382D83DF090016CDFB = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = B641961C2D83DF080016CDFB;
+					};
+				};
+			};
+			buildConfigurationList = B64195F22D83DF060016CDFB /* Build configuration list for PBXProject "BARTArrivals" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B64195EE2D83DF060016CDFB;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = B64195F82D83DF070016CDFB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B64195F62D83DF070016CDFB /* BARTArrivals */,
+				B64196062D83DF080016CDFB /* BARTArrivalsTests */,
+				B64196102D83DF080016CDFB /* BARTArrivalsUITests */,
+				B641961C2D83DF080016CDFB /* BARTArrivals Watch App */,
+				B641962E2D83DF090016CDFB /* BARTArrivals Watch AppTests */,
+				B64196382D83DF090016CDFB /* BARTArrivals Watch AppUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B64195F52D83DF070016CDFB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B64196052D83DF080016CDFB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B641960F2D83DF080016CDFB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B641961B2D83DF080016CDFB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B641962D2D83DF090016CDFB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B64196372D83DF090016CDFB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B64195F32D83DF070016CDFB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B64196032D83DF080016CDFB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B641960D2D83DF080016CDFB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B64196192D83DF080016CDFB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B641962B2D83DF090016CDFB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B64196352D83DF090016CDFB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B64196092D83DF080016CDFB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B64195F62D83DF070016CDFB /* BARTArrivals */;
+			targetProxy = B64196082D83DF080016CDFB /* PBXContainerItemProxy */;
+		};
+		B64196132D83DF080016CDFB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B64195F62D83DF070016CDFB /* BARTArrivals */;
+			targetProxy = B64196122D83DF080016CDFB /* PBXContainerItemProxy */;
+		};
+		B64196202D83DF080016CDFB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B641961C2D83DF080016CDFB /* BARTArrivals Watch App */;
+			targetProxy = B641961F2D83DF080016CDFB /* PBXContainerItemProxy */;
+		};
+		B64196312D83DF090016CDFB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B641961C2D83DF080016CDFB /* BARTArrivals Watch App */;
+			targetProxy = B64196302D83DF090016CDFB /* PBXContainerItemProxy */;
+		};
+		B641963B2D83DF090016CDFB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B641961C2D83DF080016CDFB /* BARTArrivals Watch App */;
+			targetProxy = B641963A2D83DF090016CDFB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		B64196412D83DF090016CDFB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B64196422D83DF090016CDFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		B64196442D83DF090016CDFB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"BARTArrivals Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = 25AR4GQV2S;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = BARTArrivals;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.samueldaly.BARTArrivals;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.samueldaly.BARTArrivals.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+			};
+			name = Debug;
+		};
+		B64196452D83DF090016CDFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"BARTArrivals Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = 25AR4GQV2S;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = BARTArrivals;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.samueldaly.BARTArrivals;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.samueldaly.BARTArrivals.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+			};
+			name = Release;
+		};
+		B64196482D83DF090016CDFB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"BARTArrivals/Preview Content\"";
+				DEVELOPMENT_TEAM = 25AR4GQV2S;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = BARTArrivals;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.samueldaly.BARTArrivals;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B64196492D83DF090016CDFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"BARTArrivals/Preview Content\"";
+				DEVELOPMENT_TEAM = 25AR4GQV2S;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = BARTArrivals;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.samueldaly.BARTArrivals;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B641964B2D83DF090016CDFB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 25AR4GQV2S;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.samueldaly.BARTArrivalsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BARTArrivals.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BARTArrivals";
+			};
+			name = Debug;
+		};
+		B641964C2D83DF090016CDFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 25AR4GQV2S;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.samueldaly.BARTArrivalsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BARTArrivals.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BARTArrivals";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B641964E2D83DF090016CDFB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 25AR4GQV2S;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.samueldaly.BARTArrivalsUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BARTArrivals;
+			};
+			name = Debug;
+		};
+		B641964F2D83DF090016CDFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 25AR4GQV2S;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.samueldaly.BARTArrivalsUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BARTArrivals;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B64196512D83DF090016CDFB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 25AR4GQV2S;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.samueldaly.BARTArrivals-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BARTArrivals Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BARTArrivals Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+			};
+			name = Debug;
+		};
+		B64196522D83DF090016CDFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 25AR4GQV2S;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.samueldaly.BARTArrivals-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BARTArrivals Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BARTArrivals Watch App";
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+			};
+			name = Release;
+		};
+		B64196542D83DF090016CDFB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 25AR4GQV2S;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.samueldaly.BARTArrivals-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "BARTArrivals Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+			};
+			name = Debug;
+		};
+		B64196552D83DF090016CDFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 25AR4GQV2S;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.samueldaly.BARTArrivals-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "BARTArrivals Watch App";
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B64195F22D83DF060016CDFB /* Build configuration list for PBXProject "BARTArrivals" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B64196412D83DF090016CDFB /* Debug */,
+				B64196422D83DF090016CDFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B64196432D83DF090016CDFB /* Build configuration list for PBXNativeTarget "BARTArrivals Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B64196442D83DF090016CDFB /* Debug */,
+				B64196452D83DF090016CDFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B64196472D83DF090016CDFB /* Build configuration list for PBXNativeTarget "BARTArrivals" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B64196482D83DF090016CDFB /* Debug */,
+				B64196492D83DF090016CDFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B641964A2D83DF090016CDFB /* Build configuration list for PBXNativeTarget "BARTArrivalsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B641964B2D83DF090016CDFB /* Debug */,
+				B641964C2D83DF090016CDFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B641964D2D83DF090016CDFB /* Build configuration list for PBXNativeTarget "BARTArrivalsUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B641964E2D83DF090016CDFB /* Debug */,
+				B641964F2D83DF090016CDFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B64196502D83DF090016CDFB /* Build configuration list for PBXNativeTarget "BARTArrivals Watch AppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B64196512D83DF090016CDFB /* Debug */,
+				B64196522D83DF090016CDFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B64196532D83DF090016CDFB /* Build configuration list for PBXNativeTarget "BARTArrivals Watch AppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B64196542D83DF090016CDFB /* Debug */,
+				B64196552D83DF090016CDFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B64195EF2D83DF060016CDFB /* Project object */;
+}
