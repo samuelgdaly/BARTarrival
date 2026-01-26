@@ -69,30 +69,28 @@ struct ContentView: View {
             viewModel.stopAutoRefresh()
         }
         .onChange(of: locationManager.lastKnownLocation) { location in
-            if let location = location {
-                print("🚀 Watch: Location changed in ContentView, checking if station needs update")
-                
-                // Check if this location change requires a station update
-                if let currentStation = viewModel.nearestStation {
-                    let distance = location.distance(from: currentStation.location)
-                    let newNearestStation = BARTStation.allStations.min { station1, station2 in
-                        location.distance(from: station1.location) < location.distance(from: station2.location)
-                    }
-                    
-                    if let newStation = newNearestStation {
-                        let newDistance = location.distance(from: newStation.location)
-                        if newDistance < distance && (distance - newDistance) > 50 { // 50m threshold
-                            print("🚀 Watch: Found closer station (\(newStation.displayName) vs \(currentStation.displayName)), updating")
-                            viewModel.handleLocationUpdate(location)
-                        } else {
-                            print("🚀 Watch: Current station still closest, no update needed")
-                        }
-                    }
-                } else {
-                    // No current station, update immediately
-                    print("🚀 Watch: No current station, updating immediately")
-                    viewModel.handleLocationUpdate(location)
-                }
+            guard let location = location else { return }
+            
+            print("🚀 Watch: Location changed in ContentView, checking if station needs update")
+            
+            guard let currentStation = viewModel.nearestStation else {
+                print("🚀 Watch: No current station, updating immediately")
+                viewModel.handleLocationUpdate(location)
+                return
+            }
+            
+            let currentDistance = location.distance(from: currentStation.location)
+            guard let newNearestStation = BARTStation.allStations.min(by: {
+                location.distance(from: $0.location) < location.distance(from: $1.location)
+            }) else { return }
+            
+            let newDistance = location.distance(from: newNearestStation.location)
+            
+            if newDistance < currentDistance && (currentDistance - newDistance) > 50 {
+                print("🚀 Watch: Found closer station (\(newNearestStation.displayName) vs \(currentStation.displayName)), updating")
+                viewModel.handleLocationUpdate(location)
+            } else {
+                print("🚀 Watch: Current station still closest, no update needed")
             }
         }
         .environmentObject(viewModel)
@@ -100,16 +98,12 @@ struct ContentView: View {
     
     var arrivalsView: some View {
         VStack(spacing: 8) {
-            let groupedArrivals = Dictionary(grouping: viewModel.arrivals) { arrival in
-                return "\(arrival.destination)|\(arrival.line)"
-            }
+            let groupedArrivals = Dictionary(grouping: viewModel.arrivals) { "\($0.destination)|\($0.line)" }
             
-            let sortedKeys = groupedArrivals.keys.sorted {
-                let firstArrivalForKeyA = groupedArrivals[$0]?.min(by: { $0.minutes < $1.minutes })
-                let firstArrivalForKeyB = groupedArrivals[$1]?.min(by: { $0.minutes < $1.minutes })
-                let timeA = firstArrivalForKeyA?.minutes ?? Int.max
-                let timeB = firstArrivalForKeyB?.minutes ?? Int.max
-                return timeA < timeB
+            let sortedKeys = groupedArrivals.keys.sorted { key1, key2 in
+                let time1 = groupedArrivals[key1]?.min(by: { $0.minutes < $1.minutes })?.minutes ?? Int.max
+                let time2 = groupedArrivals[key2]?.min(by: { $0.minutes < $1.minutes })?.minutes ?? Int.max
+                return time1 < time2
             }
             
             ForEach(Array(sortedKeys), id: \.self) { key in
@@ -174,13 +168,10 @@ struct WatchArrivalRow: View {
     }
     
     var formattedTimes: String {
-        let timesArray = arrivals
+        let times = arrivals
             .sorted { $0.minutes < $1.minutes }
-            .map { arrival in
-                arrival.minutes == 0 ? "Now" : "\(arrival.minutes)"
-            }
-        
-        return timesArray.joined(separator: ", ") + " min"
+            .map { $0.minutes == 0 ? "Now" : "\($0.minutes)" }
+        return times.joined(separator: ", ") + " min"
     }
 }
 
@@ -239,21 +230,16 @@ struct StationPickerView: View {
         guard let location = locationManager.lastKnownLocation else {
             return BARTStation.allStations
         }
-        
-        return BARTStation.allStations.sorted { station1, station2 in
-            let distance1 = location.distance(from: station1.location)
-            let distance2 = location.distance(from: station2.location)
-            return distance1 < distance2
+        return BARTStation.allStations.sorted {
+            location.distance(from: $0.location) < location.distance(from: $1.location)
         }
     }
     
     private func formatDistance(_ distance: CLLocationDistance) -> String {
-        if distance < 1000 {
+        guard distance >= 1000 else {
             return "\(Int(distance))m away"
-        } else {
-            let miles = distance / 1609.34
-            return String(format: "%.1f mi away", miles)
         }
+        return String(format: "%.1f mi away", distance / 1609.34)
     }
 }
 

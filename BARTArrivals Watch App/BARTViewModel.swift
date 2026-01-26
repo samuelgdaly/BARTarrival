@@ -17,12 +17,7 @@ class BARTViewModel: ObservableObject {
     private let userSelectionDuration: TimeInterval = 600 // 10 minute timeout
     private var selectionTimeoutTimer: Timer?
     private let apiKey: String = {
-        // Try to get from configuration, fallback to hardcoded key
-        if let configKey = Bundle.main.infoDictionary?["BART_API_KEY"] as? String, !configKey.isEmpty {
-            return configKey
-        }
-        // Fallback to hardcoded key (should be moved to configuration in production)
-        return "MW9S-E7SL-26DU-VV8V"
+        Bundle.main.infoDictionary?["BART_API_KEY"] as? String ?? "MW9S-E7SL-26DU-VV8V"
     }()
     private var lastAPICall: Date?
     private let minimumAPIInterval: TimeInterval = 15 // Minimum 15 seconds between API calls
@@ -92,48 +87,32 @@ class BARTViewModel: ObservableObject {
         
         // Check if we're still in user selection mode
         if let userSelectionTime = userSelectionTime,
-           let userSelectedStation = userSelectedStation {
-            let timeElapsed = Date().timeIntervalSince(userSelectionTime)
-            
-            if timeElapsed < userSelectionDuration {
-                self.nearestStation = userSelectedStation
-                fetchArrivals(for: userSelectedStation, forceRefresh: true)
-                return
-            } else {
-                self.userSelectedStation = nil
-                self.userSelectionTime = nil
-                self.selectionTimeoutTimer?.invalidate()
-            }
+           let userSelectedStation = userSelectedStation,
+           Date().timeIntervalSince(userSelectionTime) < userSelectionDuration {
+            self.nearestStation = userSelectedStation
+            fetchArrivals(for: userSelectedStation, forceRefresh: true)
+            return
+        } else {
+            // Clear expired selection
+            userSelectedStation = nil
+            userSelectionTime = nil
+            selectionTimeoutTimer?.invalidate()
         }
         
-        // Find the closest station
-        let stations = BARTStation.allStations
-        var closestStation: BARTStation?
-        var shortestDistance = Double.infinity
+        // Find nearest station
+        guard let station = BARTStation.allStations.min(by: {
+            userLocation.distance(from: $0.location) < userLocation.distance(from: $1.location)
+        }) else { return }
         
-        for station in stations {
-            let distance = userLocation.distance(from: station.location)
-            if distance < shortestDistance {
-                shortestDistance = distance
-                closestStation = station
-            }
-        }
+        let distance = Int(userLocation.distance(from: station.location))
+        print("Watch: Closest station is \(station.displayName) (\(distance)m away)")
         
-        if let station = closestStation {
-            print("Watch: Finding nearest station to location: \(userLocation.coordinate.latitude), \(userLocation.coordinate.longitude)")
-            print("Watch: Closest station is \(station.displayName) (\(Int(shortestDistance))m away)")
-            
-            // Only fetch arrivals if the station actually changed
-            if self.nearestStation?.code != station.code {
-                print("Watch: Station changed from \(self.nearestStation?.displayName ?? "none") to \(station.displayName) - fetching arrivals")
-                self.nearestStation = station
-                
-                // NEW: Save for fast startup
-                saveCurrentStation(station)
-                
-                fetchArrivals(for: station, forceRefresh: true)
-            }
-        }
+        // Only fetch arrivals if the station actually changed
+        guard self.nearestStation?.code != station.code else { return }
+        print("Watch: Station changed from \(self.nearestStation?.displayName ?? "none") to \(station.displayName)")
+        self.nearestStation = station
+        saveCurrentStation(station)
+        fetchArrivals(for: station, forceRefresh: true)
     }
     
     // NEW: Fast location-based station detection
@@ -303,25 +282,15 @@ class BARTViewModel: ObservableObject {
                 return
             }
             
-            var newArrivals: [Arrival] = []
-            for etd in etds {
-                for estimate in etd.estimate {
-                    // Convert minutes string to Int
-                    let minutesInt: Int
-                    if estimate.minutes == "Leaving" {
-                        minutesInt = 0
-                    } else {
-                        minutesInt = Int(estimate.minutes) ?? 0
-                    }
-                    // Map color to line
-                    let lineColor = estimate.color.uppercased()
-                    let arrival = Arrival(
+            let newArrivals = etds.flatMap { etd in
+                etd.estimate.map { estimate in
+                    let minutesInt = estimate.minutes == "Leaving" ? 0 : (Int(estimate.minutes) ?? 0)
+                    return Arrival(
                         destination: etd.destination,
                         minutes: minutesInt,
                         direction: estimate.direction,
-                        line: lineColor
+                        line: estimate.color.uppercased()
                     )
-                    newArrivals.append(arrival)
                 }
             }
             let sortedArrivals = newArrivals.sorted { $0.minutes < $1.minutes }

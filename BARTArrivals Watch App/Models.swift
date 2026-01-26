@@ -117,20 +117,17 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         self.locationManager.requestWhenInUseAuthorization()
     }
     
-    // 🚀 NEW: Fast location request with completion handler
     func requestLocationOnce(completion: ((CLLocation?) -> Void)? = nil) {
-        // If we already have a recent location, return it immediately
-        if let cachedLocation = lastKnownLocation {
-            let age = Date().timeIntervalSince(cachedLocation.timestamp)
-            if age < 30 { // Location is less than 30 seconds old
-                print("🚀 Watch: Using recent cached location (age: \(Int(age))s)")
-                completion?(cachedLocation)
-                return
-            }
+        // Return cached location if recent (< 30 seconds)
+        if let cachedLocation = lastKnownLocation,
+           Date().timeIntervalSince(cachedLocation.timestamp) < 30 {
+            print("🚀 Watch: Using recent cached location")
+            completion?(cachedLocation)
+            return
         }
         
+        // Queue completion if request already in progress
         if isRequestingLocation {
-            print("🚀 Watch: Location request already in progress, queuing completion")
             if let completion = completion {
                 pendingCompletions.append(completion)
             }
@@ -143,13 +140,10 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             pendingCompletions.append(completion)
         }
         
-        // 🚀 NEW: Use both methods for fastest possible location
-        self.locationManager.requestLocation()
+        locationManager.requestLocation()
+        locationManager.startUpdatingLocation()
         
-        // 🚀 NEW: Also start brief continuous updates for immediate response
-        self.locationManager.startUpdatingLocation()
-        
-        // 🚀 NEW: Stop continuous updates after 3 seconds to save battery
+        // Stop continuous updates after 3 seconds to save battery
         DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
             self?.locationManager.stopUpdatingLocation()
         }
@@ -178,14 +172,10 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             self.lastKnownLocation = location
             print("🚀 Watch: Location updated: \(location.coordinate.latitude), \(location.coordinate.longitude)")
             
-            // 🚀 NEW: Complete any pending location requests
+            // Complete any pending location requests
             if self.isRequestingLocation {
                 self.isRequestingLocation = false
-                
-                // Complete all pending completions
-                for completion in self.pendingCompletions {
-                    completion(location)
-                }
+                self.pendingCompletions.forEach { $0(location) }
                 self.pendingCompletions.removeAll()
             }
         }
@@ -194,14 +184,10 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("❌ Watch: Location error: \(error.localizedDescription)")
         
-        // 🚀 NEW: Complete pending requests with error
+        // Complete pending requests with error
         if isRequestingLocation {
             isRequestingLocation = false
-            
-            // Complete all pending completions with nil
-            for completion in pendingCompletions {
-                completion(nil)
-            }
+            pendingCompletions.forEach { $0(nil) }
             pendingCompletions.removeAll()
         }
     }
@@ -227,24 +213,16 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         stopUpdatingLocation()
     }
     
-    // 🚀 NEW: Ultra-fast location check using cached location
     func getLocationImmediately() -> CLLocation? {
-        if let cachedLocation = lastKnownLocation {
-            let age = Date().timeIntervalSince(cachedLocation.timestamp)
-            if age < 60 { // Location is less than 1 minute old
-                print("🚀 Watch: Using cached location for immediate response (age: \(Int(age))s)")
-                return cachedLocation
-            }
+        guard let cachedLocation = lastKnownLocation,
+              Date().timeIntervalSince(cachedLocation.timestamp) < 60 else {
+            return nil
         }
-        
-        print("🚀 Watch: No recent cached location available")
-        return nil
+        return cachedLocation
     }
     
-    // 🚀 NEW: Check if we have a valid recent location
     func hasRecentLocation() -> Bool {
         guard let location = lastKnownLocation else { return false }
-        let age = Date().timeIntervalSince(location.timestamp)
-        return age < 60 // Less than 1 minute old
+        return Date().timeIntervalSince(location.timestamp) < 60
     }
 }

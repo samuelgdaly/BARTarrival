@@ -9,8 +9,6 @@ class BARTViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var userLocation: CLLocation?
     
-
-    
     private var userSelectedStation: BARTStation?
     private var userSelectionTime: Date?
     private let userSelectionDuration: TimeInterval = 600 // 10 minute timeout
@@ -177,29 +175,19 @@ class BARTViewModel: ObservableObject {
                 return
             }
             
-            var newArrivals: [Arrival] = []
-            for etd in etds {
-                for estimate in etd.estimate {
-                    // Convert minutes string to Int
-                    let minutesInt: Int
-                    if estimate.minutes == "Leaving" {
-                        minutesInt = 0
-                    } else {
-                        minutesInt = Int(estimate.minutes) ?? 0
-                    }
-                    // Map color to line
-                    let lineColor = estimate.color.uppercased()
-                    let arrival = Arrival(
+            let newArrivals = etds.flatMap { etd in
+                etd.estimate.map { estimate in
+                    let minutesInt = estimate.minutes == "Leaving" ? 0 : (Int(estimate.minutes) ?? 0)
+                    return Arrival(
                         destination: etd.destination,
                         minutes: minutesInt,
                         direction: estimate.direction,
-                        line: lineColor,
+                        line: estimate.color.uppercased(),
                         cars: Int(estimate.length) ?? 0,
                         platform: estimate.platform,
                         delayed: (Int(estimate.delay) ?? 0) > 0,
                         delayMinutes: (Int(estimate.delay) ?? 0) / 60
                     )
-                    newArrivals.append(arrival)
                 }
             }
             let sortedArrivals = newArrivals.sorted { $0.minutes < $1.minutes }
@@ -263,18 +251,6 @@ class BARTViewModel: ObservableObject {
     func stopAutoRefresh() {
         refreshTimer?.invalidate()
         refreshTimer = nil
-    }
-    
-    private func minutesUntilArrival(timeString: String) -> Int {
-                            let dateFormatter = ISO8601DateFormatter()
-                            dateFormatter.formatOptions = [.withInternetDateTime]
-                            
-        guard let arrivalDate = dateFormatter.date(from: timeString) else {
-            return 0
-        }
-        
-        let timeInterval = arrivalDate.timeIntervalSince(Date())
-        return max(0, Int(round(timeInterval / 60)))
     }
     
     deinit {

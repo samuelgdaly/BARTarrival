@@ -17,12 +17,12 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func requestLocationOnce() {
-        if locationManager.authorizationStatus == .notDetermined {
+        guard locationManager.authorizationStatus != .notDetermined else {
             locationManager.requestWhenInUseAuthorization()
-        } else {
-            print("iOS: Requesting one-time location update")
-            locationManager.requestLocation()
+            return
         }
+        print("iOS: Requesting one-time location update")
+        locationManager.requestLocation()
     }
     
     func startUpdatingLocation() {

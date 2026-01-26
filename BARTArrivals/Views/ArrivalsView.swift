@@ -8,26 +8,20 @@ struct ArrivalsView: View {
     var body: some View {
         VStack(spacing: 0) {
             // Station header with station name and change button
-            VStack(alignment: .leading, spacing: 8) {
-                HStack(alignment: .top) {
-                    Text(viewModel.nearestStation?.displayName ?? "Finding Nearest Station...")
-                        .font(.system(size: 40, weight: .bold))
-                        .foregroundColor(.black)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.5)
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        showingStationPicker = true
-                    }) {
-                        Image(systemName: "tram.fill")
-                            .font(.system(size: 20))
-                            .foregroundColor(.blue)
-                    }
-                }
+            HStack(alignment: .top) {
+                Text(viewModel.nearestStation?.displayName ?? "Finding Nearest Station...")
+                    .font(.system(size: 40, weight: .bold))
+                    .foregroundColor(.black)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
                 
-
+                Spacer()
+                
+                Button(action: { showingStationPicker = true }) {
+                    Image(systemName: "tram.fill")
+                        .font(.system(size: 20))
+                        .foregroundColor(.blue)
+                }
             }
             .padding(.top, 44)
             .padding(.bottom, 20)
@@ -47,7 +41,7 @@ struct ArrivalsView: View {
                             .foregroundColor(.gray)
                             .padding()
                     } else if viewModel.arrivals.isEmpty {
-                        Text("No arrivals found for this station.")
+                        Text("No arrivals found")
                             .foregroundColor(.gray)
                             .padding()
                     } else {
@@ -103,8 +97,7 @@ struct ArrivalsView: View {
                     .background(Color.white)
                     
                     if key != sortedKeys.last {
-                        Divider()
-                            .padding(.leading, 12)
+                        Divider().padding(.leading, 12)
                     }
                 }
             }
