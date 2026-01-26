@@ -1,0 +1,32 @@
+{
+  "images" : [
+    {
+      "filename" : "Simple BART (1).png",
+      "idiom" : "watch",
+      "scale" : "2x",
+      "screen-width" : "<=145"
+    },
+    {
+      "filename" : "Simple BART (1) 1.png",
+      "idiom" : "watch",
+      "scale" : "2x",
+      "screen-width" : ">161"
+    },
+    {
+      "filename" : "Simple BART (1) 2.png",
+      "idiom" : "watch",
+      "scale" : "2x",
+      "screen-width" : ">145"
+    },
+    {
+      "filename" : "Simple BART (1) 3.png",
+      "idiom" : "watch",
+      "scale" : "2x",
+      "screen-width" : ">183"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
