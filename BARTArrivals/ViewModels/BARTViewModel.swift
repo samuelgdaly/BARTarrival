@@ -11,45 +11,18 @@ class BARTViewModel: ObservableObject {
     
     private var userSelectedStation: BARTStation?
     private var userSelectionTime: Date?
-    private let userSelectionDuration: TimeInterval = 600 // 10 minute timeout
+    private let userSelectionDuration: TimeInterval = 600 // 10 minutes
     private var refreshTimer: Timer?
     private var selectionTimeoutTimer: Timer?
-    private var lastArrivalsHash: String = "" // For change detection
+    private var lastArrivalsHash: String = ""
     private let apiKey: String = {
         Bundle.main.infoDictionary?["BART_API_KEY"] as? String ?? "MW9S-E7SL-26DU-VV8V"
     }()
     private var lastAPICall: Date?
-    private let minimumAPIInterval: TimeInterval = 15 // Minimum 15 seconds between API calls
-    
-    // --- BART API Codable structs ---
-    struct BARTETDResponse: Codable {
-        let root: BARTETDRoot
-    }
-    struct BARTETDRoot: Codable {
-        let station: [BARTETDStation]
-    }
-    struct BARTETDStation: Codable {
-        let name: String
-        let abbr: String
-        let etd: [BARTETD]?
-    }
-    struct BARTETD: Codable {
-        let destination: String
-        let abbreviation: String?
-        let limited: String?
-        let estimate: [BARTETDEstimate]
-    }
-    struct BARTETDEstimate: Codable {
-        let minutes: String
-        let platform: String
-        let direction: String
-        let length: String
-        let color: String
-        let hexcolor: String
-        let bikeflag: String
-        let delay: String
-    }
-    // --- End BART API Codable structs ---
+    private let minimumAPIInterval: TimeInterval = 15 // seconds
+    private let autoRefreshInterval: TimeInterval = 60 // seconds
+    private var lastLocationUpdateTime: Date?
+    private let locationUpdateThrottle: TimeInterval = 2.0 // seconds
     
     init() {
         // Start periodic location checks when the view model is initialized
@@ -74,6 +47,13 @@ class BARTViewModel: ObservableObject {
     }
     
     func findNearestStation(to userLocation: CLLocation) {
+        // Throttle location updates to prevent excessive processing
+        if let lastUpdate = lastLocationUpdateTime,
+           Date().timeIntervalSince(lastUpdate) < locationUpdateThrottle {
+            return
+        }
+        lastLocationUpdateTime = Date()
+        
         self.userLocation = userLocation
         
         // Check if we're still in user selection mode
@@ -208,7 +188,10 @@ class BARTViewModel: ObservableObject {
                 self.errorMessage = "No upcoming departures"
             } else {
                 self.errorMessage = nil
-                self.startAutoRefresh()
+                // Only start auto-refresh if we have arrivals and timer isn't running
+                if refreshTimer == nil {
+                    self.startAutoRefresh()
+                }
             }
         } catch {
             print("❌ iOS: Error parsing BART API JSON: \(error)")
@@ -236,9 +219,11 @@ class BARTViewModel: ObservableObject {
     }
     
     func startAutoRefresh() {
-        refreshTimer?.invalidate()
-        print("iOS: Starting auto-refresh timer (60 second interval)")
-        refreshTimer = Timer.scheduledTimer(withTimeInterval: 60.0, repeats: true) { [weak self] _ in
+        // Prevent starting multiple timers
+        guard refreshTimer == nil else { return }
+        
+        print("iOS: Starting auto-refresh timer (\(Int(autoRefreshInterval)) second interval)")
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: autoRefreshInterval, repeats: true) { [weak self] _ in
             guard let self = self, let station = self.nearestStation else { 
                 print("iOS: Auto-refresh skipped - no station available")
                 return 

@@ -10,7 +10,7 @@ import CoreLocation
 
 // Simple Watch App ContentView that uses shared models
 struct ContentView: View {
-    @StateObject private var viewModel = BARTViewModel()
+    @EnvironmentObject var viewModel: BARTViewModel
     @StateObject private var locationManager = LocationManager.shared
     @State private var showingStationPicker = false
     
@@ -57,11 +57,6 @@ struct ContentView: View {
             StationPickerView()
         }
         .onAppear {
-            print("🚀 Watch ContentView: Starting coordinated location sequence")
-            
-            // 🚀 NEW: Start continuous location monitoring for real-time updates
-            // This ensures we catch location changes while the app is running
-            print("🚀 Watch: Starting continuous location monitoring")
             LocationManager.shared.startUpdatingLocation()
         }
         .onDisappear {
@@ -71,27 +66,8 @@ struct ContentView: View {
         .onChange(of: locationManager.lastKnownLocation) { location in
             guard let location = location else { return }
             
-            print("🚀 Watch: Location changed in ContentView, checking if station needs update")
-            
-            guard let currentStation = viewModel.nearestStation else {
-                print("🚀 Watch: No current station, updating immediately")
-                viewModel.handleLocationUpdate(location)
-                return
-            }
-            
-            let currentDistance = location.distance(from: currentStation.location)
-            guard let newNearestStation = BARTStation.allStations.min(by: {
-                location.distance(from: $0.location) < location.distance(from: $1.location)
-            }) else { return }
-            
-            let newDistance = location.distance(from: newNearestStation.location)
-            
-            if newDistance < currentDistance && (currentDistance - newDistance) > 50 {
-                print("🚀 Watch: Found closer station (\(newNearestStation.displayName) vs \(currentStation.displayName)), updating")
-                viewModel.handleLocationUpdate(location)
-            } else {
-                print("🚀 Watch: Current station still closest, no update needed")
-            }
+            // Let handleLocationUpdate do the station finding - it has throttling
+            viewModel.handleLocationUpdate(location)
         }
         .environmentObject(viewModel)
     }

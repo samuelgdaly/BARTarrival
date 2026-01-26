@@ -21,8 +21,12 @@ struct BARTArrivalsApp: App {
             switch newPhase {
             case .active:
                 print("App became active - refreshing location")
-                // Refresh location when app becomes active
                 LocationManager.shared.requestLocationOnce()
+                // Auto-refresh will start automatically when arrivals are loaded
+                // Only start if we already have arrivals but no timer
+                if !bartViewModel.arrivals.isEmpty {
+                    bartViewModel.startAutoRefresh()
+                }
                 // If we already have a location, find the nearest station
                 if let location = LocationManager.shared.lastKnownLocation {
                     bartViewModel.findNearestStation(to: location)

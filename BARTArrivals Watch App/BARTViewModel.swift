@@ -14,57 +14,28 @@ class BARTViewModel: ObservableObject {
     private var lastArrivalsHash: String = "" // For change detection
     private var userSelectedStation: BARTStation?
     private var userSelectionTime: Date?
-    private let userSelectionDuration: TimeInterval = 600 // 10 minute timeout
+    private let userSelectionDuration: TimeInterval = 600 // 10 minutes
     private var selectionTimeoutTimer: Timer?
     private let apiKey: String = {
         Bundle.main.infoDictionary?["BART_API_KEY"] as? String ?? "MW9S-E7SL-26DU-VV8V"
     }()
     private var lastAPICall: Date?
-    private let minimumAPIInterval: TimeInterval = 15 // Minimum 15 seconds between API calls
+    private let minimumAPIInterval: TimeInterval = 15 // seconds
+    private let autoRefreshInterval: TimeInterval = 60 // seconds
     
-    // NEW: Fast startup optimization
     private var hasInitialized = false
     private var lastKnownStationCode: String?
-    
-    // BART API Codable structs
-    struct BARTETDResponse: Codable {
-        let root: BARTETDRoot
-    }
-    struct BARTETDRoot: Codable {
-        let station: [BARTETDStation]
-    }
-    struct BARTETDStation: Codable {
-        let name: String
-        let abbr: String
-        let etd: [BARTETD]?
-    }
-    struct BARTETD: Codable {
-        let destination: String
-        let abbreviation: String?
-        let limited: String?
-        let estimate: [BARTETDEstimate]
-    }
-    struct BARTETDEstimate: Codable {
-        let minutes: String
-        let platform: String
-        let direction: String
-        let length: String
-        let color: String
-        let hexcolor: String
-        let bikeflag: String
-        let delay: String
-    }
+    private var hasRestoredStation = false
     
     init() {
-        // NEW: Try to restore from last known station immediately
         restoreLastKnownStation()
-        
-        // Start periodic location checks when the view model is initialized
         startPeriodicLocationChecks()
     }
     
-    // NEW: Fast startup - restore last known station immediately
     private func restoreLastKnownStation() {
+        guard !hasRestoredStation else { return }
+        hasRestoredStation = true
+        
         if let lastStationCode = UserDefaults.standard.string(forKey: "WatchLastKnownStation"),
            let station = BARTStation.allStations.first(where: { $0.code == lastStationCode }) {
             print("🚀 Watch: Fast startup - restoring last known station: \(station.displayName)")
@@ -76,7 +47,6 @@ class BARTViewModel: ObservableObject {
         }
     }
     
-    // NEW: Save current station for fast startup
     private func saveCurrentStation(_ station: BARTStation) {
         UserDefaults.standard.set(station.code, forKey: "WatchLastKnownStation")
         self.lastKnownStationCode = station.code
@@ -115,7 +85,6 @@ class BARTViewModel: ObservableObject {
         fetchArrivals(for: station, forceRefresh: true)
     }
     
-    // NEW: Fast location-based station detection
     func fastLocationUpdate() {
         print("🚀 Watch: Fast location update requested")
         
@@ -137,8 +106,17 @@ class BARTViewModel: ObservableObject {
         }
     }
     
-    // NEW: Handle location updates from LocationManager
+    private var lastLocationUpdateTime: Date?
+    private let locationUpdateThrottle: TimeInterval = 2.0 // seconds
+    
     func handleLocationUpdate(_ location: CLLocation) {
+        // Throttle location updates to prevent excessive processing
+        if let lastUpdate = lastLocationUpdateTime,
+           Date().timeIntervalSince(lastUpdate) < locationUpdateThrottle {
+            return
+        }
+        lastLocationUpdateTime = Date()
+        
         print("🚀 Watch: Handling location update from LocationManager")
         self.userLocation = location
         self.findNearestStation(to: location)
@@ -151,7 +129,6 @@ class BARTViewModel: ObservableObject {
             self.userSelectedStation = station
             self.userSelectionTime = Date()
             
-            // NEW: Save for fast startup
             self.saveCurrentStation(station)
             
             self.fetchArrivals(for: station, forceRefresh: true)
@@ -173,11 +150,6 @@ class BARTViewModel: ObservableObject {
                 return
             }
         }
-        
-        // 🚀 NEW: Check for updated location before fetching arrivals
-        // This ensures we're always showing departures for the nearest station
-        print("🚀 Watch: Checking for updated location before fetching arrivals")
-        checkForUpdatedLocation()
         
         // CRITICAL: Verify the station code being used in the API call
         let apiUrl = "https://api.bart.gov/api/etd.aspx?cmd=etd&orig=\(station.code)&key=\(apiKey)&json=y"
@@ -213,9 +185,16 @@ class BARTViewModel: ObservableObject {
         }.resume()
     }
     
-    // 🚀 NEW: Check for updated location and update station if needed
+    private var lastLocationCheckTime: Date?
+    private let locationCheckThrottle: TimeInterval = 5.0 // seconds
+    
     func checkForUpdatedLocation() {
-        print("🚀 Watch: Checking for updated location")
+        // Throttle location checks to prevent excessive calls
+        if let lastCheck = lastLocationCheckTime,
+           Date().timeIntervalSince(lastCheck) < locationCheckThrottle {
+            return
+        }
+        lastLocationCheckTime = Date()
         
         // Get current location from LocationManager
         if let currentLocation = LocationManager.shared.lastKnownLocation {
@@ -241,7 +220,6 @@ class BARTViewModel: ObservableObject {
         }
     }
     
-    // 🚀 NEW: Force location check and station update
     func forceLocationCheck() {
         print("🚀 Watch: Force location check requested")
         
@@ -289,7 +267,11 @@ class BARTViewModel: ObservableObject {
                         destination: etd.destination,
                         minutes: minutesInt,
                         direction: estimate.direction,
-                        line: estimate.color.uppercased()
+                        line: estimate.color.uppercased(),
+                        cars: Int(estimate.length) ?? 0,
+                        platform: estimate.platform,
+                        delayed: (Int(estimate.delay) ?? 0) > 0,
+                        delayMinutes: (Int(estimate.delay) ?? 0) / 60
                     )
                 }
             }
@@ -311,7 +293,10 @@ class BARTViewModel: ObservableObject {
                 self.errorMessage = "No upcoming departures"
             } else {
                 self.errorMessage = nil
-                self.startAutoRefresh()
+                // Only start auto-refresh if we have arrivals and timer isn't running
+                if refreshTimer == nil {
+                    self.startAutoRefresh()
+                }
             }
         } catch {
             print("❌ Watch: Error parsing BART API JSON: \(error)")
@@ -321,43 +306,30 @@ class BARTViewModel: ObservableObject {
     }
     
     func startPeriodicLocationChecks() {
-        // NEW: For Watch app, we check location immediately when app opens/becomes visible
-        // This is more responsive and battery-friendly than continuous monitoring
-        
-        // If we already have a location, use it immediately
         if let location = self.userLocation {
-            print("🚀 Watch: Using existing location for immediate station detection")
             self.findNearestStation(to: location)
-        } else {
-            // NEW: Check if LocationManager has a recent location
-            if LocationManager.shared.hasRecentLocation() {
-                print("🚀 Watch: LocationManager has recent location, using it")
-                if let location = LocationManager.shared.lastKnownLocation {
-                    self.userLocation = location
-                    self.findNearestStation(to: location)
-                }
-            } else {
-                // NEW: Only request location if we don't have any recent location
-                print("🚀 Watch: No recent location available, will wait for app to request it")
-                // Don't request location here - let the app handle it
-            }
+        } else if LocationManager.shared.hasRecentLocation(),
+                  let location = LocationManager.shared.lastKnownLocation {
+            self.userLocation = location
+            self.findNearestStation(to: location)
         }
     }
     
     func startAutoRefresh() {
-        refreshTimer?.invalidate()
-        print("Watch: Starting auto-refresh timer (60 second interval)")
-        refreshTimer = Timer.scheduledTimer(withTimeInterval: 60.0, repeats: true) { [weak self] _ in
+        // Prevent starting multiple timers
+        guard refreshTimer == nil else { return }
+        
+        print("Watch: Starting auto-refresh timer (\(Int(autoRefreshInterval)) second interval)")
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: autoRefreshInterval, repeats: true) { [weak self] _ in
             guard let self = self, let station = self.nearestStation else { 
                 print("Watch: Auto-refresh skipped - no station available")
                 return 
             }
             print("Watch: Auto-refresh: fetching arrivals for \(station.displayName)")
             
-            // 🚀 NEW: Check for location updates before auto-refresh
+            // Check for location updates before auto-refresh
             self.checkForUpdatedLocation()
             
-            // Fetch arrivals (this will also check location again, but that's fine)
             self.fetchArrivals(for: station, forceRefresh: false)
         }
     }

@@ -2,96 +2,8 @@ import Foundation
 import CoreLocation
 import SwiftUI
 
-// BART Station structure
-struct BARTStation: Identifiable, Equatable, Codable {
-    let id = UUID()
-    let apiName: String      // Name from BART API (for verification)
-    let displayName: String  // User-friendly name for display
-    let code: String
-    let latitude: Double
-    let longitude: Double
-    
-    var location: CLLocation {
-        CLLocation(latitude: latitude, longitude: longitude)
-    }
-    
-    init(apiName: String, displayName: String, code: String, latitude: Double, longitude: Double) {
-        self.apiName = apiName
-        self.displayName = displayName
-        self.code = code
-        self.latitude = latitude
-        self.longitude = longitude
-    }
-    
-    static func == (lhs: BARTStation, rhs: BARTStation) -> Bool {
-        lhs.code == rhs.code
-    }
-    
-    // MARK: - JSON Loading
-    
-    static func loadStations() -> [BARTStation] {
-        guard let url = Bundle.main.url(forResource: "stations", withExtension: "json"),
-              let data = try? Data(contentsOf: url) else {
-            print("❌ Watch: Failed to load stations.json")
-            return []
-        }
-        
-        do {
-            let decoder = JSONDecoder()
-            let stationsData = try decoder.decode(StationsResponse.self, from: data)
-            print("✅ Watch: Loaded \(stationsData.stations.count) stations from JSON")
-            return stationsData.stations
-        } catch {
-            print("❌ Watch: Failed to decode stations.json: \(error)")
-            return []
-        }
-    }
-    
-    static var allStations: [BARTStation] {
-        loadStations()
-    }
-}
-
-// MARK: - JSON Response Models
-struct StationsResponse: Codable {
-    let stations: [BARTStation]
-}
-
-// Simplified Arrival structure for Watch App
-struct Arrival: Identifiable, Equatable {
-    let id = UUID()
-    let destination: String
-    let minutes: Int
-    let direction: String
-    let line: String
-    
-    var timeDisplay: String {
-        minutes == 0 ? "Now" : "\(minutes) min"
-    }
-    
-    var lineColor: Color {
-        BARTLine.findLine(by: line)?.color ?? fallbackColor
-    }
-    
-    private var fallbackColor: Color {
-        switch line.uppercased() {
-        case "RED": return .red
-        case "YELLOW": return .yellow
-        case "BLUE": return .blue
-        case "GREEN": return .green
-        case "ORANGE": return .orange
-        default: return .gray
-        }
-    }
-    
-    var lineDisplayName: String {
-        BARTLine.findLine(by: line)?.displayName ?? line
-    }
-    
-    static func == (lhs: Arrival, rhs: Arrival) -> Bool {
-        lhs.id == rhs.id
-    }
-}
+// NOTE: BARTStation, Arrival, BARTLine, BARTAPIResponse, and Color+Hex are now in separate files
+// This file only contains LocationManager for Watch App
 
 // Simplified LocationManager for Watch App
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
@@ -101,7 +13,6 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var lastKnownLocation: CLLocation?
     private var isUpdatingContinuously = false
     
-    // 🚀 NEW: Fast location optimization
     private var locationRequestCompletion: ((CLLocation?) -> Void)?
     private var isRequestingLocation = false
     private var pendingCompletions: [(CLLocation?) -> Void] = []
@@ -109,11 +20,8 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     override private init() {
         super.init()
         self.locationManager.delegate = self
-        // 🚀 NEW: Use best accuracy for immediate location
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        // 🚀 NEW: Reduce distance filter for more responsive updates
-        self.locationManager.distanceFilter = 50 // 50 meters instead of default
-        // 🚀 NEW: Request authorization immediately
+        self.locationManager.distanceFilter = 50 // meters
         self.locationManager.requestWhenInUseAuthorization()
     }
     
