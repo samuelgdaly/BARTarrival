@@ -35,6 +35,16 @@ struct ContentView: View {
                 Label("System Map", systemImage: "map")
             }
             .tag(1)
+            
+            // Schedules Tab
+            NavigationView {
+                SchedulesView()
+                    .navigationBarHidden(true)
+            }
+            .tabItem {
+                Label("Schedules", systemImage: "list.bullet")
+            }
+            .tag(2)
         }
         .onAppear {
             print("ContentView appeared")
