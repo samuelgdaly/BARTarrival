@@ -102,6 +102,11 @@
 			path = "BARTArrivals Watch AppUITests";
 			sourceTree = "<group>";
 		};
+		B64197002D83DF090016CDFB /* BARTArrivalsShared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BARTArrivalsShared;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				B64195F92D83DF070016CDFB /* BARTArrivals */,
+				B64197002D83DF090016CDFB /* BARTArrivalsShared */,
 				B641960A2D83DF080016CDFB /* BARTArrivalsTests */,
 				B64196142D83DF080016CDFB /* BARTArrivalsUITests */,
 				B64196212D83DF080016CDFB /* BARTArrivals Watch App */,
@@ -195,6 +201,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				B64195F92D83DF070016CDFB /* BARTArrivals */,
+				B64197002D83DF090016CDFB /* BARTArrivalsShared */,
 			);
 			name = BARTArrivals;
 			packageProductDependencies = (
@@ -263,6 +270,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				B64196212D83DF080016CDFB /* BARTArrivals Watch App */,
+				B64197002D83DF090016CDFB /* BARTArrivalsShared */,
 			);
 			name = "BARTArrivals Watch App";
 			packageProductDependencies = (

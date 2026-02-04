@@ -11,6 +11,8 @@ import SwiftUI
 struct BARTArrivalsApp: App {
     @Environment(\.scenePhase) private var scenePhase
     @StateObject private var bartViewModel = BARTViewModel()
+    @State private var lastBackgroundTime: Date?
+    private let inactiveResetThreshold: TimeInterval = 600 // 10 minutes
     
     var body: some Scene {
         WindowGroup {
@@ -20,23 +22,26 @@ struct BARTArrivalsApp: App {
         .onChange(of: scenePhase) { _, newPhase in
             switch newPhase {
             case .active:
-                print("App became active - refreshing location")
+                // If app hasn't been used for 10+ minutes, reset and do fresh location check
+                if let lastBackground = lastBackgroundTime,
+                   Date().timeIntervalSince(lastBackground) >= inactiveResetThreshold {
+                    bartViewModel.resetForFreshStart()
+                }
+                LocationManager.shared.startUpdatingLocation()
                 LocationManager.shared.requestLocationOnce()
-                // Auto-refresh will start automatically when arrivals are loaded
-                // Only start if we already have arrivals but no timer
+                bartViewModel.startPeriodicLocationChecks()
+                if let location = LocationManager.shared.lastKnownLocation {
+                    bartViewModel.handleLocationUpdate(location)
+                }
                 if !bartViewModel.arrivals.isEmpty {
                     bartViewModel.startAutoRefresh()
                 }
-                // If we already have a location, find the nearest station
-                if let location = LocationManager.shared.lastKnownLocation {
-                    bartViewModel.findNearestStation(to: location)
-                }
             case .background:
-                // Stop timers when entering background
+                lastBackgroundTime = Date()
                 bartViewModel.stopAutoRefresh()
+                bartViewModel.stopPeriodicLocationChecks()
                 LocationManager.shared.stopUpdatingLocation()
             case .inactive:
-                // App is inactive
                 break
             @unknown default:
                 break

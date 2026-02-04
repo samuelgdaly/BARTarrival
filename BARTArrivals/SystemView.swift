@@ -93,7 +93,7 @@ struct BARTMapImageView: View {
         
         return Image(imageName)
             .resizable()
-            .scaledToFill() // Use scaledToFill to ensure the map takes up the entire space
+            .scaledToFit() // Fit entire map on screen
             .scaleEffect(scale)
             .offset(x: position.width, y: position.height)
             .gesture(

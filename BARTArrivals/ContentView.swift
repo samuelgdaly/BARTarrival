@@ -8,7 +8,6 @@
 import SwiftUI
 import CoreLocation
 
-// Basic ContentView structure to use our models
 struct ContentView: View {
     @StateObject private var viewModel = BARTViewModel()
     @StateObject private var locationManager = LocationManager.shared
@@ -35,29 +34,20 @@ struct ContentView: View {
                 Label("System Map", systemImage: "map")
             }
             .tag(1)
-            
-            // Schedules Tab
-            NavigationView {
-                SchedulesView()
-                    .navigationBarHidden(true)
-            }
-            .tabItem {
-                Label("Schedules", systemImage: "list.bullet")
-            }
-            .tag(2)
         }
         .onAppear {
-            print("ContentView appeared")
             LocationManager.shared.startUpdatingLocation()
+            LocationManager.shared.requestLocationOnce()
+            viewModel.startPeriodicLocationChecks()
         }
         .onDisappear {
             LocationManager.shared.stopUpdatingLocation()
             viewModel.stopAutoRefresh()
+            viewModel.stopPeriodicLocationChecks()
         }
-        .onChange(of: locationManager.lastKnownLocation) { oldValue, newValue in
+        .onChange(of: locationManager.lastKnownLocation) { _, newValue in
             if let location = newValue {
-                print("Location updated in ContentView: \(location.coordinate.latitude), \(location.coordinate.longitude)")
-                viewModel.findNearestStation(to: location)
+                viewModel.handleLocationUpdate(location)
             }
         }
         .environmentObject(viewModel)

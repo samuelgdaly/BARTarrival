@@ -19,25 +19,26 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     func requestLocationOnce() {
         guard locationManager.authorizationStatus != .notDetermined else {
             locationManager.requestWhenInUseAuthorization()
+            print("BARTArrivals: Location requested (awaiting authorization)")
             return
         }
-        print("iOS: Requesting one-time location update")
+        print("BARTArrivals: Requesting location...")
         locationManager.requestLocation()
     }
     
     func startUpdatingLocation() {
         if !isUpdatingContinuously {
             isUpdatingContinuously = true
-            print("iOS: Starting continuous location updates")
             locationManager.startUpdatingLocation()
+            print("BARTArrivals: Location updates started")
         }
     }
     
     func stopUpdatingLocation() {
         if isUpdatingContinuously {
             isUpdatingContinuously = false
-            print("iOS: Stopping continuous location updates")
             locationManager.stopUpdatingLocation()
+            print("BARTArrivals: Location updates stopped")
         }
     }
     
@@ -45,12 +46,12 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         guard let location = locations.last else { return }
         DispatchQueue.main.async {
             self.lastKnownLocation = location
-            print("iOS: Location updated: \(location.coordinate.latitude), \(location.coordinate.longitude)")
         }
+        print("BARTArrivals: Location received (\(String(format: "%.4f", location.coordinate.latitude)), \(String(format: "%.4f", location.coordinate.longitude)))")
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("❌ iOS: Location error: \(error.localizedDescription)")
+        print("BARTArrivals: Location failed - \(error.localizedDescription)")
     }
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {

@@ -15,97 +15,113 @@ class BARTViewModel: ObservableObject {
     private var refreshTimer: Timer?
     private var selectionTimeoutTimer: Timer?
     private var lastArrivalsHash: String = ""
+    private let locationCheckInterval: TimeInterval = 30 // seconds - check location often
+    private let apiRefreshInterval: TimeInterval = 60 // seconds - API only every 60s (except manual/station change)
     private let apiKey: String = {
         Bundle.main.infoDictionary?["BART_API_KEY"] as? String ?? "MW9S-E7SL-26DU-VV8V"
     }()
     private var lastAPICall: Date?
-    private let minimumAPIInterval: TimeInterval = 15 // seconds
-    private let autoRefreshInterval: TimeInterval = 60 // seconds
     private var lastLocationUpdateTime: Date?
     private let locationUpdateThrottle: TimeInterval = 2.0 // seconds
     
     init() {
-        // Start periodic location checks when the view model is initialized
-        startPeriodicLocationChecks()
+        // Location checks and timers are started when app becomes active
+    }
+    
+    /// Call when app hasn't been used for 10+ minutes - reset to fresh location check
+    func resetForFreshStart() {
+        DispatchQueue.main.async {
+            self.userSelectedStation = nil
+            self.userSelectionTime = nil
+            self.selectionTimeoutTimer?.invalidate()
+            self.nearestStation = nil
+            self.arrivals = []
+            self.errorMessage = nil
+        }
     }
     
     func selectStation(_ station: BARTStation) {
-        print("iOS: Manually selecting station: \(station.displayName)")
         DispatchQueue.main.async {
             self.nearestStation = station
             self.userSelectedStation = station
             self.userSelectionTime = Date()
             self.fetchArrivals(for: station, forceRefresh: true)
             
-            // Start timeout timer
+            // Start 10-minute timer - manual selection stays until this fires
             self.selectionTimeoutTimer?.invalidate()
             self.selectionTimeoutTimer = Timer.scheduledTimer(withTimeInterval: self.userSelectionDuration, repeats: false) { [weak self] _ in
                 self?.userSelectedStation = nil
                 self?.userSelectionTime = nil
+                print("BARTArrivals: Manual selection expired, reverting to location-based")
             }
+            print("BARTArrivals: Manual selection set to \(station.displayName) (10 min)")
         }
     }
     
+    /// Process location update with throttling. Used by Watch app's onChange(of: lastKnownLocation).
+    func handleLocationUpdate(_ location: CLLocation) {
+        findNearestStation(to: location)
+    }
+    
     func findNearestStation(to userLocation: CLLocation) {
-        // Throttle location updates to prevent excessive processing
+        self.userLocation = userLocation
+        
+        // Manual selection takes precedence - never override for full 10 min window
+        if let userSelectionTime = userSelectionTime,
+           let userSelectedStation = userSelectedStation,
+           Date().timeIntervalSince(userSelectionTime) < userSelectionDuration {
+            self.nearestStation = userSelectedStation
+            if shouldRefreshArrivals() {
+                fetchArrivals(for: userSelectedStation, forceRefresh: false)
+            }
+            return
+        }
+        
+        // Selection expired or none - clear and use location
+        self.userSelectedStation = nil
+        self.userSelectionTime = nil
+        selectionTimeoutTimer?.invalidate()
+        
+        // Throttle location-based updates
         if let lastUpdate = lastLocationUpdateTime,
            Date().timeIntervalSince(lastUpdate) < locationUpdateThrottle {
             return
         }
         lastLocationUpdateTime = Date()
         
-        self.userLocation = userLocation
-        
-        // Check if we're still in user selection mode
-        if let userSelectionTime = userSelectionTime,
-           let userSelectedStation = userSelectedStation,
-           Date().timeIntervalSince(userSelectionTime) < userSelectionDuration {
-            self.nearestStation = userSelectedStation
-            fetchArrivals(for: userSelectedStation, forceRefresh: true)
-            return
-        } else {
-            // Clear expired selection
-            userSelectedStation = nil
-            userSelectionTime = nil
-            selectionTimeoutTimer?.invalidate()
-        }
-        
-        // Find nearest station
+        // Find nearest station by location
         guard let station = BARTStation.allStations.min(by: {
             userLocation.distance(from: $0.location) < userLocation.distance(from: $1.location)
         }) else { return }
         
-        let distance = Int(userLocation.distance(from: station.location))
-        print("iOS: Closest station is \(station.displayName) (\(distance)m away)")
-        
-        // Only fetch arrivals if the station actually changed
-        guard self.nearestStation?.code != station.code else { return }
-        print("iOS: Station changed from \(self.nearestStation?.displayName ?? "none") to \(station.displayName)")
+        let stationChanged = self.nearestStation?.code != station.code
         self.nearestStation = station
-        fetchArrivals(for: station)
+        
+        if stationChanged {
+            print("BARTArrivals: Nearest station changed to \(station.displayName)")
+            fetchArrivals(for: station, forceRefresh: true)
+        } else if shouldRefreshArrivals() {
+            print("BARTArrivals: Refreshing arrivals for \(station.displayName)")
+            fetchArrivals(for: station, forceRefresh: false)
+        }
+    }
+    
+    private func shouldRefreshArrivals() -> Bool {
+        guard let lastCall = lastAPICall else { return true }
+        return Date().timeIntervalSince(lastCall) >= apiRefreshInterval
     }
     
     func fetchArrivals(for station: BARTStation, forceRefresh: Bool = false) {
-        // Rate limiting check - but allow forced refreshes for manual station selections
-        if !forceRefresh, let lastCall = lastAPICall {
-            let timeSinceLastCall = Date().timeIntervalSince(lastCall)
-            if timeSinceLastCall < minimumAPIInterval {
-                return
-            }
-        }
+        if !forceRefresh, !shouldRefreshArrivals() { return }
         
         // CRITICAL: Verify the station code being used in the API call
         let apiUrl = "https://api.bart.gov/api/etd.aspx?cmd=etd&orig=\(station.code)&key=\(apiKey)&json=y"
         
-        guard let url = URL(string: apiUrl) else {
-            print("❌ iOS: Invalid URL constructed")
-            return
-        }
+        guard let url = URL(string: apiUrl) else { return }
         
         self.lastAPICall = Date()
         self.isLoading = true
-        
-        print("🚉 iOS: Fetching arrivals for \(station.displayName) (code: \(station.code))")
+        print("BARTArrivals: Fetching arrivals for \(station.displayName)...")
         
         URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             DispatchQueue.main.async {
@@ -113,16 +129,16 @@ class BARTViewModel: ObservableObject {
                 self.isLoading = false
                 
                 if let error = error {
-                    print("❌ iOS: Network error: \(error.localizedDescription)")
+                    print("BARTArrivals: API failed - \(error.localizedDescription)")
+                    self.errorMessage = "Network error"
                     return
                 }
                 
                 guard let data = data else {
-                    print("❌ iOS: No data received")
+                    print("BARTArrivals: API failed - no data received")
+                    self.errorMessage = "No data received"
                     return
                 }
-                
-                print("📥 iOS: Received \(data.count) bytes from API")
                 self.parseArrivalsData(data, for: station)
             }
         }.resume()
@@ -134,22 +150,15 @@ class BARTViewModel: ObservableObject {
             let bartResponse = try decoder.decode(BARTETDResponse.self, from: data)
             
             guard let stationData = bartResponse.root.station.first else {
-                print("❌ iOS: No station found in response")
                 self.arrivals = []
                 self.errorMessage = "No upcoming departures"
                 return
             }
             
             // CRITICAL: Verify the returned station matches what we requested
-            if stationData.abbr != station.code {
-                print("🚨 iOS: CRITICAL ERROR: Station code mismatch!")
-                print("  Requested departures for: \(station.displayName) (\(station.code))")
-                print("  But API returned data for: \(stationData.name) (\(stationData.abbr))")
-                return // Stop processing if there's a mismatch
-            }
+            if stationData.abbr != station.code { return }
             
             guard let etds = stationData.etd else {
-                print("❌ iOS: No ETD data found for station \(stationData.name)")
                 self.arrivals = []
                 self.errorMessage = "No upcoming departures"
                 return
@@ -175,67 +184,49 @@ class BARTViewModel: ObservableObject {
             // Create a hash of the arrivals to detect changes
             let arrivalsHash = sortedArrivals.map { "\($0.destination)-\($0.minutes)-\($0.line)" }.joined(separator: "|")
             
-            // Only update the UI if there are actual changes
             if arrivalsHash != self.lastArrivalsHash {
-                print("✅ iOS: Updated arrivals - \(sortedArrivals.count) arrivals with changes")
                 self.arrivals = sortedArrivals
                 self.lastArrivalsHash = arrivalsHash
-            } else {
-                print("ℹ️ iOS: No changes in arrivals data")
             }
             
             if self.arrivals.isEmpty {
+                print("BARTArrivals: API OK for \(station.displayName) - no upcoming departures")
                 self.errorMessage = "No upcoming departures"
             } else {
+                print("BARTArrivals: API OK for \(station.displayName) - \(sortedArrivals.count) arrivals")
                 self.errorMessage = nil
-                // Only start auto-refresh if we have arrivals and timer isn't running
-                if refreshTimer == nil {
-                    self.startAutoRefresh()
-                }
             }
         } catch {
-            print("❌ iOS: Error parsing BART API JSON: \(error)")
+            print("BARTArrivals: API parse error - \(error.localizedDescription)")
             self.errorMessage = "Error parsing data"
             self.arrivals = []
         }
     }
     
     func startPeriodicLocationChecks() {
-        // For iOS app, we check location periodically and also on significant location changes
-        // This provides a good balance between responsiveness and battery life
+        guard refreshTimer == nil else { return }
         
-        // If we already have a location, use it immediately
-        if let location = self.userLocation {
-            self.findNearestStation(to: location)
-        }
-        
-        // Start a timer to check for location updates every 30 seconds
-        // This ensures we don't miss location changes
-        Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) { [weak self] _ in
-            if let location = self?.userLocation {
-                self?.findNearestStation(to: location)
+        // Single timer: check location every 30s, API every 60s (except station change / manual)
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: locationCheckInterval, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            if let location = LocationManager.shared.lastKnownLocation {
+                self.findNearestStation(to: location)
             }
         }
+        RunLoop.main.add(refreshTimer!, forMode: .common)
+    }
+    
+    func stopPeriodicLocationChecks() {
+        refreshTimer?.invalidate()
+        refreshTimer = nil
     }
     
     func startAutoRefresh() {
-        // Prevent starting multiple timers
-        guard refreshTimer == nil else { return }
-        
-        print("iOS: Starting auto-refresh timer (\(Int(autoRefreshInterval)) second interval)")
-        refreshTimer = Timer.scheduledTimer(withTimeInterval: autoRefreshInterval, repeats: true) { [weak self] _ in
-            guard let self = self, let station = self.nearestStation else { 
-                print("iOS: Auto-refresh skipped - no station available")
-                return 
-            }
-            print("iOS: Auto-refresh: fetching arrivals for \(station.displayName)")
-            self.fetchArrivals(for: station, forceRefresh: true)
-        }
+        startPeriodicLocationChecks()
     }
     
     func stopAutoRefresh() {
-        refreshTimer?.invalidate()
-        refreshTimer = nil
+        stopPeriodicLocationChecks()
     }
     
     deinit {

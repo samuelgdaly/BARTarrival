@@ -13,6 +13,8 @@ struct BARTArrivalsWatchApp: App {
     @StateObject private var bartViewModel = BARTViewModel()
     @StateObject private var extensionDelegate = ExtensionDelegate()
     @Environment(\.scenePhase) private var scenePhase
+    @State private var lastBackgroundTime: Date?
+    private let inactiveResetThreshold: TimeInterval = 600 // 10 minutes
     
     var body: some Scene {
         WindowGroup {
@@ -20,30 +22,33 @@ struct BARTArrivalsWatchApp: App {
                 .environmentObject(bartViewModel)
                 .onAppear {
                     _ = BARTComplicationController()
-                    bartViewModel.forceLocationCheck()
                 }
         }
         .onChange(of: scenePhase) { _, newPhase in
             switch newPhase {
             case .active:
-                bartViewModel.forceLocationCheck()
-                // Auto-refresh will start automatically when arrivals are loaded
-                // Only start if we already have arrivals but no timer
+                if let lastBackground = lastBackgroundTime,
+                   Date().timeIntervalSince(lastBackground) >= inactiveResetThreshold {
+                    bartViewModel.resetForFreshStart()
+                }
+                LocationManager.shared.startUpdatingLocation()
+                LocationManager.shared.requestLocationOnce()
+                bartViewModel.startPeriodicLocationChecks()
+                if let location = LocationManager.shared.lastKnownLocation {
+                    bartViewModel.handleLocationUpdate(location)
+                }
                 if !bartViewModel.arrivals.isEmpty {
                     bartViewModel.startAutoRefresh()
                 }
                 
             case .background:
-                print("BARTArrivals: Watch app entered background")
-                
-                // Stop timers when entering background
+                lastBackgroundTime = Date()
                 bartViewModel.stopAutoRefresh()
+                bartViewModel.stopPeriodicLocationChecks()
                 LocationManager.shared.stopUpdatingLocation()
                 
             case .inactive:
-                print("BARTArrivals: Watch app became inactive")
-                
-                // Don't request location when becoming inactive - this was causing redundancy
+                break
                 
             @unknown default:
                 break

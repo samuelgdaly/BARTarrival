@@ -55,13 +55,17 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showingStationPicker) {
             StationPickerView()
+                .environmentObject(viewModel)
         }
         .onAppear {
             LocationManager.shared.startUpdatingLocation()
+            LocationManager.shared.requestLocationOnce()
+            viewModel.startPeriodicLocationChecks()
         }
         .onDisappear {
             LocationManager.shared.stopUpdatingLocation()
             viewModel.stopAutoRefresh()
+            viewModel.stopPeriodicLocationChecks()
         }
         .onChange(of: locationManager.lastKnownLocation) { location in
             guard let location = location else { return }
